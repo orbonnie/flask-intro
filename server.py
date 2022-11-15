@@ -1,6 +1,6 @@
 """Greeting Flask app."""
 
-from random import choice
+# from random import choice
 
 from flask import Flask, request
 
@@ -18,42 +18,67 @@ AWESOMENESS = [
 def start_here():
     """Home page."""
 
-    return "<!doctype html><html>Hi! This is the home page.<a href=/hello>  Hello!  </a></html>"
+    return """
+      <!doctype html>
+      <html>
+        <body>
+          <p>Hi! Would you like an insult or a complement?</p>
+          <form action="/hello">
+            Insult<input type="radio" name="choice" value="insult">
+            Compliment<input type="radio" name="choice" value="compliment">
+            <input type="submit" value="Submit">
+          </form>
+        </body>
+      </html>
+      """
 
 
 @app.route('/hello')
 def say_hello():
     """Say hello and prompt for user's name."""
-
-    return """
-    <!doctype html>
-    <html>
-      <head>
-        <title>Hi There!</title>
-      </head>
-      <body>
-        <h1>Hi There!</h1>
-        <form action="/greet">
-          What's your name? <input type="text" name="person">
-          <label for="compliment">Select a compliment</label>
-          <select name="compliment">
-            <option>awesome</option>
-            <option>terrific</option>
-            <option>fantastic</option>
-            <option>neato</option>
-            <option>fantabulous</option>
-            <option>wowza</option>
-            <option>oh-so-not-me</option>
-            <option>brilliant</option>
-            <option>ducky</option>
-            <option>coolio</option>
-            <option>incredible</option>
-            <option>wonderful</option>
-            <option>smashing</option>
-            <option>lovely</option>
-          </select>
-          <input type="submit" value="Submit">
-        </form>
+    choice = request.args.get('choice')
+    if choice == 'compliment':
+      return """
+        <!doctype html>
+        <html>
+          <head>
+            <title>Hi There!</title>
+          </head>
+          <body>
+            <h1>Hi There!</h1>
+            <form action="/greet">
+              What's your name? <input type="text" name="person">
+              <label for="compliment">Select a compliment</label>
+              <select name="compliment">
+                <option>awesome</option>
+                <option>terrific</option>
+                <option>fantastic</option>
+                <option>neato</option>
+                <option>fantabulous</option>
+                <option>wowza</option>
+                <option>oh-so-not-me</option>
+                <option>brilliant</option>
+                <option>ducky</option>
+                <option>coolio</option>
+                <option>incredible</option>
+                <option>wonderful</option>
+                <option>smashing</option>
+                <option>lovely</option>
+              </select>
+              <input type="submit" value="Submit">
+            </form>
+        </body>
+      </html>
+      """
+    elif choice == 'insult':
+      return """
+      <!doctype html>
+      <html>
+        <head>
+          <title>Hi There!</title>
+        </head>
+        <body>
+          <h1>Hi There!</h1>
         <form action="/diss">
           What's your name? <input type="text" name="person">
           <label for="diss">Select a diss</label>
@@ -68,7 +93,6 @@ def say_hello():
           </select>
           <input type="submit" value="Submit">
         </form>
-
       </body>
     </html>
     """
@@ -88,7 +112,8 @@ def diss_person():
         <title>A diss</title>
       </head>
       <body>
-        Hi, {player}! I think you're {diss}!
+        <p>Hi, {player}! I think you're {diss}!</p>
+        <a href=/>Start Again!</a>
       </body>
     </html>
     """
@@ -110,7 +135,8 @@ def greet_person():
         <title>A Compliment</title>
       </head>
       <body>
-        Hi, {player}! I think you're {compliment}!
+        <p>Hi, {player}! I think you're {compliment}!</p>
+        <a href=/>Start Again!</a>
       </body>
     </html>
     """
